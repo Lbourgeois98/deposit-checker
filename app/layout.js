@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Neon Payment Checker",
+  title: "Deposit Screenshot Checker",
   description: "Visually check payment screenshots for tampering"
 };
 
