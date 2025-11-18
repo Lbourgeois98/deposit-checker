@@ -281,7 +281,7 @@ export default function HomePage() {
   return (
     <div className="app-root">
       <div className="card">
-        <h1>Neon Payment Checker</h1>
+        <h1>Deposit Screenshot Checker</h1>
         <p className="card-subtitle">
           Upload a payment screenshot (PayPal, Cash App, Venmo, Zelle, Apple Pay, or
           Chime) and get a visual authenticity score. Higher = looks more legit.
