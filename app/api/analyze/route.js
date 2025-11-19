@@ -1,32 +1,45 @@
 import { NextResponse } from "next/server";
 import exifr from "exifr";
-import sharp from "sharp";
+import * as Jimp from "jimp";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
 
-export async function POST(request) {
+export async function POST(req) {
   try {
-    const data = await request.formData();
-    const file = data.get("file");
+    const formData = await req.formData();
+    const file = formData.get("file");
+
+    if (!file) {
+      return NextResponse.json({ message: "No file uploaded." });
+    }
+
     const buffer = Buffer.from(await file.arrayBuffer());
 
+    // 1) EXIF metadata
     const metadata = await exifr.parse(buffer).catch(() => null);
-    const imageInfo = await sharp(buffer).metadata();
+    let metadataStatus = metadata ? "EXIF found (likely real)" : "No EXIF (possibly edited)";
 
-    let issues = [];
+    // 2) Pixel analysis for editing artifacts
+    const image = await Jimp.read(buffer);
+    let suspicious = 0;
 
-    if (!metadata) issues.push("❌ No EXIF data — likely edited or screenshot");
-    if (metadata && metadata.Software) issues.push(`⚠ Edited using ${metadata.Software}`);
-    if (imageInfo.width < 500) issues.push("❌ Resolution too low — possibly cropped");
-    if (imageInfo.compression) issues.push("⚠ Double compression detected");
+    image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+      const diff = Math.abs(this.bitmap.data[idx] - this.bitmap.data[idx + 1]);
+      if (diff > 40) suspicious++;
+    });
 
-    let verdict = issues.length === 0
-      ? "✔ Looks like an original screenshot"
-      : issues.join("\n");
+    let totalPixels = image.bitmap.width * image.bitmap.height;
+    let tamperLevel = (suspicious / totalPixels) * 100;
 
-    return NextResponse.json({ message: verdict });
+    let verdict =
+      tamperLevel > 0.2 || !metadata
+        ? "⚠️ Possible manipulation"
+        : "🟢 Looks like an original screenshot";
+
+    return NextResponse.json({
+      message: `${verdict}\n📊 EXIF: ${metadataStatus}\n🔎 Tampering score: ${tamperLevel.toFixed(2)}%`,
+    });
   } catch (err) {
-    return NextResponse.json({ message: "Error processing image" }, { status: 500 });
+    return NextResponse.json({ message: "❌ Error analyzing image" });
   }
 }
