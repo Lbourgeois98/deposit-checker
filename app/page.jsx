@@ -1,44 +1,38 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function HomePage() {
   const [image, setImage] = useState(null);
   const [result, setResult] = useState("");
 
   const analyze = async () => {
+    if (!image) return alert("Upload a screenshot first!");
+
     const formData = new FormData();
     formData.append("file", image);
 
     const res = await fetch("/api/analyze", { method: "POST", body: formData });
     const data = await res.json();
+
     setResult(data.message);
   };
 
   return (
-    <main style={{ textAlign: "center", padding: "50px" }}>
-      
-      {/* 🔥 ADD YOUR LOGO HERE */}
-      <img
-        src="/logo.png"
-        width="200"
-        style={{ marginBottom: "20px" }}
-        alt="Logo"
-      />
+    <main>
+      <Image src="/logo.png" className="logo" width={200} height={200} alt="logo" />
+      <h1 className="cyber-title">💸 Deposit Analyzer</h1>
+      <p>Upload a screenshot. We’ll detect if it’s original or edited.</p>
 
-      <h1 style={{ fontSize: "48px" }}>💸 Deposit Analyzer</h1>
-      <p>Upload a payment screenshot. We'll check if it's an original or edited.</p>
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setImage(e.target.files[0])}
-      />
+      <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
       <br /><br />
 
       <button onClick={analyze}>Analyze Screenshot 🔍</button>
 
       {result && (
-        <p style={{ marginTop: "40px", fontSize: "24px" }}>{result}</p>
+        <p style={{ marginTop: "40px", fontSize: "28px", color: "white" }}>
+          {result}
+        </p>
       )}
     </main>
   );
