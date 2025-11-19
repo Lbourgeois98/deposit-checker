@@ -1,24 +1,43 @@
 body {
   margin: 0;
   padding: 0;
-  background: #080016;
-  color: #39FF14;
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 8px #39FF14;
+  background: #05000a;
+  font-family: 'Orbitron', system-ui;
+  color: #e4ff4e;
+}
+
+main {
+  text-align: center;
+  padding: 50px;
 }
 
 button {
-  background: #B000FF;
-  border: 2px solid #39FF14;
-  padding: 10px 20px;
-  cursor: pointer;
+  background: linear-gradient(45deg, #a400ff, #00ff66);
+  border: none;
+  padding: 15px 30px;
+  color: white;
   font-weight: bold;
-  font-size: 18px;
-  text-shadow: 0 0 6px #fff;
-  box-shadow: 0 0 15px #B000FF, 0 0 30px #39FF14;
-  transition: all 0.2s;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0,255,118,0.7), 0 0 25px rgba(162,0,255,0.7);
 }
 
 button:hover {
-  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+input {
+  margin-top: 20px;
+}
+
+.cyber-title {
+  font-size: 52px;
+  text-shadow: 0 0 15px #0ff, 0 0 30px #ff0, 0 0 50px #f0f;
+}
+
+.logo {
+  width: 200px;
+  filter: drop-shadow(0 0 40px #ab00ff);
+  margin-bottom: 20px;
 }
