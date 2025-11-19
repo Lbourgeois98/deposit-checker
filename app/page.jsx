@@ -16,6 +16,15 @@ export default function HomePage() {
 
   return (
     <main style={{ textAlign: "center", padding: "50px" }}>
+      
+      {/* 🔥 ADD YOUR LOGO HERE */}
+      <img
+        src="/logo.png"
+        width="200"
+        style={{ marginBottom: "20px" }}
+        alt="Logo"
+      />
+
       <h1 style={{ fontSize: "48px" }}>💸 Deposit Analyzer</h1>
       <p>Upload a payment screenshot. We'll check if it's an original or edited.</p>
 
@@ -25,9 +34,12 @@ export default function HomePage() {
         onChange={(e) => setImage(e.target.files[0])}
       />
       <br /><br />
+
       <button onClick={analyze}>Analyze Screenshot 🔍</button>
 
-      {result && <p style={{ marginTop: "40px", fontSize: "24px" }}>{result}</p>}
+      {result && (
+        <p style={{ marginTop: "40px", fontSize: "24px" }}>{result}</p>
+      )}
     </main>
   );
 }
